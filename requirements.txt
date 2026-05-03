@@ -1,0 +1,33 @@
+# REQUIREMENTS
+
+# SYSTEM
+tqdm>=4.65.0          # Progress
+
+# DATA
+pandas>=2.0.0         # Data
+numpy>=1.24.0         # Math
+
+# AI / ML
+torch>=2.0.0          # PyTorch
+transformers>=4.30.0  # NLP
+scikit-learn>=1.3.0   # ML
+
+# AI Prevention Advice (Groq LLaMA API)
+groq>=0.9.0
+
+# DASHBOARD
+flask>=3.0.0          # Web
+flask-cors>=4.0.0     # CORS
+flask-login>=0.6.3    # Auth
+flask-socketio>=5.3.6 # WebSocket
+flask-pymongo>=2.3.0  # MongoDB integration
+
+# DATABASE
+pymongo>=4.6.0        # MongoDB driver
+
+# UTILITIES
+bcrypt>=4.1.2
+python-dotenv>=1.0.0
+python-socketio>=5.11.0
+requests>=2.31.0       # HTTP client (attacker sim)
+

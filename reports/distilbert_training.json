@@ -1,0 +1,51 @@
+{
+  "model": "DistilBERT Attack Classifier",
+  "vocab_size": 49,
+  "epochs_requested": 1,
+  "epochs_trained": 1,
+  "batch_size": 32,
+  "learning_rate": 0.0003,
+  "max_length": 128,
+  "seed": 42,
+  "early_stop_patience": 3,
+  "train_samples": 100,
+  "val_samples": 20,
+  "train_loss": 0.5934,
+  "training_time_min": 0.14,
+  "final_val_metrics": {
+    "eval_loss": 0.4352,
+    "eval_accuracy": 1.0,
+    "eval_precision": 0.0,
+    "eval_recall": 0.0,
+    "eval_f1": 0.0,
+    "eval_roc_auc": NaN,
+    "eval_runtime": 0.2793,
+    "eval_samples_per_second": 71.6,
+    "eval_steps_per_second": 3.58,
+    "epoch": 1.0
+  },
+  "epoch_logs": [
+    {
+      "eval_loss": 0.4352,
+      "eval_accuracy": 1.0,
+      "eval_precision": 0.0,
+      "eval_recall": 0.0,
+      "eval_f1": 0.0,
+      "eval_roc_auc": NaN,
+      "eval_runtime": 0.3756,
+      "eval_samples_per_second": 53.25,
+      "eval_steps_per_second": 2.663,
+      "epoch": 1.0,
+      "step": 4
+    },
+    {
+      "train_runtime": 8.1348,
+      "train_samples_per_second": 12.293,
+      "train_steps_per_second": 0.492,
+      "total_flos": 126582667920.0,
+      "train_loss": 0.5934,
+      "epoch": 1.0,
+      "step": 4
+    }
+  ]
+}

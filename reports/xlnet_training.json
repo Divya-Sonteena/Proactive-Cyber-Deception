@@ -1,0 +1,47 @@
+{
+  "model": "XLNet Next-Step Behaviour Predictor",
+  "vocab_size": 49,
+  "epochs_requested": 1,
+  "epochs_trained": 1,
+  "batch_size": 32,
+  "learning_rate": 0.0003,
+  "max_length": 128,
+  "seed": 42,
+  "early_stop_patience": 3,
+  "train_samples": 100,
+  "val_samples": 20,
+  "train_loss": 2.8426,
+  "training_time_min": 0.13,
+  "final_val_metrics": {
+    "eval_loss": 2.3014,
+    "eval_perplexity": 9.9883,
+    "eval_top1_accuracy": 0.3753,
+    "eval_top5_accuracy": 0.9078,
+    "eval_runtime": 0.2637,
+    "eval_samples_per_second": 75.855,
+    "eval_steps_per_second": 3.793,
+    "epoch": 1.0
+  },
+  "epoch_logs": [
+    {
+      "eval_loss": 2.3014,
+      "eval_perplexity": 9.9883,
+      "eval_top1_accuracy": 0.3753,
+      "eval_top5_accuracy": 0.9078,
+      "eval_runtime": 0.2768,
+      "eval_samples_per_second": 72.25,
+      "eval_steps_per_second": 3.612,
+      "epoch": 1.0,
+      "step": 4
+    },
+    {
+      "train_runtime": 7.6103,
+      "train_samples_per_second": 13.14,
+      "train_steps_per_second": 0.526,
+      "total_flos": 132245902320.0,
+      "train_loss": 2.8426,
+      "epoch": 1.0,
+      "step": 4
+    }
+  ]
+}

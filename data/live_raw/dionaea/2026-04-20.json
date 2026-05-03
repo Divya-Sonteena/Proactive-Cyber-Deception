@@ -1,0 +1,60 @@
+{"timestamp": "2026-04-20T15:04:20.212236+00:00Z", "event_type": "accept", "connection_id": "con_0xd1a8ca8b", "src_ip": "83.18.156.109", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T15:04:21.212236+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xd1a8ca8b", "protocol": "smb"}
+{"timestamp": "2026-04-20T15:04:22.212236+00:00Z", "event_type": "close", "connection_id": "con_0xd1a8ca8b", "duration": 2.0}
+{"timestamp": "2026-04-20T15:26:53.212372+00:00Z", "event_type": "accept", "connection_id": "con_0x244b4e74", "src_ip": "15.201.216.105", "protocol": "mysql", "dst_port": 3306}
+{"timestamp": "2026-04-20T15:26:55.212372+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x244b4e74", "protocol": "mysql"}
+{"timestamp": "2026-04-20T15:26:56.212372+00:00Z", "event_type": "close", "connection_id": "con_0x244b4e74", "duration": 3.0}
+{"timestamp": "2026-04-20T15:24:58.517124+00:00Z", "event_type": "accept", "connection_id": "con_0x6a6f9330", "src_ip": "202.149.14.174", "protocol": "http", "dst_port": 80}
+{"timestamp": "2026-04-20T15:25:00.517124+00:00Z", "event_type": "http_request", "connection_id": "con_0x6a6f9330", "method": "POST", "path": "config.php"}
+{"timestamp": "2026-04-20T15:25:02.517124+00:00Z", "event_type": "close", "connection_id": "con_0x6a6f9330", "duration": 4.0}
+{"timestamp": "2026-04-20T15:14:44.414675+00:00Z", "event_type": "accept", "connection_id": "con_0xcd222129", "src_ip": "215.68.191.29", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T15:14:45.414675+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xcd222129", "protocol": "smb"}
+{"timestamp": "2026-04-20T15:14:46.414675+00:00Z", "event_type": "close", "connection_id": "con_0xcd222129", "duration": 2.0}
+{"timestamp": "2026-04-20T15:39:05.736737+00:00Z", "event_type": "accept", "connection_id": "con_0x69b20809", "src_ip": "129.19.7.189", "protocol": "mssql", "dst_port": 1433}
+{"timestamp": "2026-04-20T15:39:07.736737+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x69b20809", "protocol": "mssql"}
+{"timestamp": "2026-04-20T15:39:08.736737+00:00Z", "event_type": "close", "connection_id": "con_0x69b20809", "duration": 3.0}
+{"timestamp": "2026-04-20T16:21:49.569628+00:00Z", "event_type": "accept", "connection_id": "con_0x7cf940fb", "src_ip": "25.42.203.243", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:21:50.569628+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x7cf940fb", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:21:51.569628+00:00Z", "event_type": "close", "connection_id": "con_0x7cf940fb", "duration": 2.0}
+{"timestamp": "2026-04-20T16:28:51.821058+00:00Z", "event_type": "accept", "connection_id": "con_0x017ba8d1", "src_ip": "40.167.42.128", "protocol": "http", "dst_port": 80}
+{"timestamp": "2026-04-20T16:28:54.821058+00:00Z", "event_type": "http_request", "connection_id": "con_0x017ba8d1", "method": "GET", "path": "phpmyadmin"}
+{"timestamp": "2026-04-20T16:28:56.821058+00:00Z", "event_type": "close", "connection_id": "con_0x017ba8d1", "duration": 5.0}
+{"timestamp": "2026-04-20T16:50:03.940404+00:00Z", "event_type": "accept", "connection_id": "con_0x815d741d", "src_ip": "103.249.127.2", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:50:06.940404+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x815d741d", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:50:07.940404+00:00Z", "event_type": "close", "connection_id": "con_0x815d741d", "duration": 4.0}
+{"timestamp": "2026-04-20T16:48:20.166994+00:00Z", "event_type": "accept", "connection_id": "con_0xfba82461", "src_ip": "103.77.75.73", "protocol": "mysql", "dst_port": 3306}
+{"timestamp": "2026-04-20T16:48:21.166994+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xfba82461", "protocol": "mysql"}
+{"timestamp": "2026-04-20T16:48:22.166994+00:00Z", "event_type": "close", "connection_id": "con_0xfba82461", "duration": 2.0}
+{"timestamp": "2026-04-20T16:52:28.420745+00:00Z", "event_type": "accept", "connection_id": "con_0xf1d959c4", "src_ip": "161.70.147.190", "protocol": "mysql", "dst_port": 3306}
+{"timestamp": "2026-04-20T16:52:30.420745+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xf1d959c4", "protocol": "mysql"}
+{"timestamp": "2026-04-20T16:52:31.420745+00:00Z", "event_type": "close", "connection_id": "con_0xf1d959c4", "duration": 3.0}
+{"timestamp": "2026-04-20T16:49:21.666692+00:00Z", "event_type": "accept", "connection_id": "con_0x585e3e5a", "src_ip": "124.206.83.169", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:49:24.666692+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x585e3e5a", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:49:25.666692+00:00Z", "event_type": "close", "connection_id": "con_0x585e3e5a", "duration": 4.0}
+{"timestamp": "2026-04-20T16:40:19.915910+00:00Z", "event_type": "accept", "connection_id": "con_0xe9717d16", "src_ip": "171.228.86.122", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:40:21.915910+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xe9717d16", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:40:22.915910+00:00Z", "event_type": "close", "connection_id": "con_0xe9717d16", "duration": 3.0}
+{"timestamp": "2026-04-20T16:49:28.329031+00:00Z", "event_type": "accept", "connection_id": "con_0x2df4967b", "src_ip": "177.184.177.27", "protocol": "mssql", "dst_port": 1433}
+{"timestamp": "2026-04-20T16:49:31.329031+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x2df4967b", "protocol": "mssql"}
+{"timestamp": "2026-04-20T16:49:32.329031+00:00Z", "event_type": "close", "connection_id": "con_0x2df4967b", "duration": 4.0}
+{"timestamp": "2026-04-20T16:50:05.960924+00:00Z", "event_type": "accept", "connection_id": "con_0xffe0c17f", "src_ip": "112.214.29.106", "protocol": "http", "dst_port": 80}
+{"timestamp": "2026-04-20T16:50:06.960924+00:00Z", "event_type": "http_request", "connection_id": "con_0xffe0c17f", "method": "GET", "path": "index.html"}
+{"timestamp": "2026-04-20T16:50:07.960924+00:00Z", "event_type": "close", "connection_id": "con_0xffe0c17f", "duration": 2.0}
+{"timestamp": "2026-04-20T16:53:25.338039+00:00Z", "event_type": "accept", "connection_id": "con_0xa8027cbf", "src_ip": "12.21.1.158", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:53:26.338039+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0xa8027cbf", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:53:27.338039+00:00Z", "event_type": "close", "connection_id": "con_0xa8027cbf", "duration": 2.0}
+{"timestamp": "2026-04-20T16:55:57.706714+00:00Z", "event_type": "accept", "connection_id": "con_0x0acf8c06", "src_ip": "146.2.146.86", "protocol": "mysql", "dst_port": 3306}
+{"timestamp": "2026-04-20T16:56:00.706714+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x0acf8c06", "protocol": "mysql"}
+{"timestamp": "2026-04-20T16:56:01.706714+00:00Z", "event_type": "close", "connection_id": "con_0x0acf8c06", "duration": 4.0}
+{"timestamp": "2026-04-20T16:45:15.979691+00:00Z", "event_type": "accept", "connection_id": "con_0x56c2d248", "src_ip": "17.85.230.212", "protocol": "mssql", "dst_port": 1433}
+{"timestamp": "2026-04-20T16:45:18.979691+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x56c2d248", "protocol": "mssql"}
+{"timestamp": "2026-04-20T16:45:19.979691+00:00Z", "event_type": "close", "connection_id": "con_0x56c2d248", "duration": 4.0}
+{"timestamp": "2026-04-20T16:57:05.257621+00:00Z", "event_type": "accept", "connection_id": "con_0xf9a9c31e", "src_ip": "170.110.225.128", "protocol": "http", "dst_port": 80}
+{"timestamp": "2026-04-20T16:57:08.257621+00:00Z", "event_type": "http_request", "connection_id": "con_0xf9a9c31e", "method": "GET", "path": "config.php"}
+{"timestamp": "2026-04-20T16:57:10.257621+00:00Z", "event_type": "close", "connection_id": "con_0xf9a9c31e", "duration": 5.0}
+{"timestamp": "2026-04-20T16:56:56.902448+00:00Z", "event_type": "accept", "connection_id": "con_0xca4b6d1f", "src_ip": "184.239.182.109", "protocol": "ftp", "dst_port": 21}
+{"timestamp": "2026-04-20T16:56:57.902448+00:00Z", "event_type": "ftp_login_attempt", "connection_id": "con_0xca4b6d1f", "username": "admin", "password": "root"}
+{"timestamp": "2026-04-20T16:56:58.902448+00:00Z", "event_type": "close", "connection_id": "con_0xca4b6d1f", "duration": 2.0}
+{"timestamp": "2026-04-20T16:38:29.491794+00:00Z", "event_type": "accept", "connection_id": "con_0x26ee0642", "src_ip": "26.88.20.166", "protocol": "smb", "dst_port": 445}
+{"timestamp": "2026-04-20T16:38:32.491794+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x26ee0642", "protocol": "smb"}
+{"timestamp": "2026-04-20T16:38:33.491794+00:00Z", "event_type": "close", "connection_id": "con_0x26ee0642", "duration": 4.0}

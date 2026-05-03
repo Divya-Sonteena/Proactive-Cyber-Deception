@@ -1,0 +1,6 @@
+{"timestamp": "2026-04-16T15:06:27.379667+00:00Z", "event_type": "accept", "connection_id": "con_0x5e145b0d", "src_ip": "121.62.231.90", "protocol": "mssql", "dst_port": 1433}
+{"timestamp": "2026-04-16T15:06:29.379667+00:00Z", "event_type": "connection_attempt", "connection_id": "con_0x5e145b0d", "protocol": "mssql"}
+{"timestamp": "2026-04-16T15:06:30.379667+00:00Z", "event_type": "close", "connection_id": "con_0x5e145b0d", "duration": 3.0}
+{"timestamp": "2026-04-16T15:11:13.604911+00:00Z", "event_type": "accept", "connection_id": "con_0x8ae3b7c4", "src_ip": "249.171.152.179", "protocol": "http", "dst_port": 80}
+{"timestamp": "2026-04-16T15:11:15.604911+00:00Z", "event_type": "http_request", "connection_id": "con_0x8ae3b7c4", "method": "POST", "path": "login"}
+{"timestamp": "2026-04-16T15:11:16.604911+00:00Z", "event_type": "close", "connection_id": "con_0x8ae3b7c4", "duration": 3.0}

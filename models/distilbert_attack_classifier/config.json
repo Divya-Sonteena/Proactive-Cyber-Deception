@@ -1,0 +1,31 @@
+{
+  "activation": "gelu",
+  "architectures": [
+    "DistilBertForSequenceClassification"
+  ],
+  "attention_dropout": 0.1,
+  "dim": 256,
+  "dropout": 0.1,
+  "dtype": "float32",
+  "hidden_dim": 1024,
+  "id2label": {
+    "0": "BENIGN",
+    "1": "MALICIOUS"
+  },
+  "initializer_range": 0.02,
+  "label2id": {
+    "BENIGN": 0,
+    "MALICIOUS": 1
+  },
+  "max_position_embeddings": 128,
+  "model_type": "distilbert",
+  "n_heads": 4,
+  "n_layers": 4,
+  "pad_token_id": 30,
+  "problem_type": "single_label_classification",
+  "qa_dropout": 0.1,
+  "seq_classif_dropout": 0.2,
+  "sinusoidal_pos_embds": false,
+  "transformers_version": "4.57.3",
+  "vocab_size": 49
+}

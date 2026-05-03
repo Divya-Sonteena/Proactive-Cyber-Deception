@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Models — PCD{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">🧠 Model Performance</h1>
+</div>
+
+<!-- Tabs -->
+<div class="tab-bar">
+    <button class="tab-btn active" data-tab="distilbert">DistilBERT (Attack Classifier)</button>
+    <button class="tab-btn" data-tab="xlnet">XLNet (Behaviour Predictor)</button>
+</div>
+
+<!-- DistilBERT Tab -->
+<div id="tab-distilbert" class="tab-content active">
+    <div id="db-loading" class="loading-placeholder">Loading DistilBERT metrics…</div>
+    <div id="db-content" style="display:none">
+        <div class="section-row">
+            <div class="panel panel-third">
+                <div class="panel-header"><h2>Overall Metrics</h2></div>
+                <div class="metrics-grid" id="db-metrics"></div>
+            </div>
+            <div class="panel panel-third">
+                <div class="panel-header"><h2>Confusion Matrix</h2></div>
+                <div class="confusion-matrix" id="db-cm"></div>
+            </div>
+            <div class="panel panel-third">
+                <div class="panel-header"><h2>Class Distribution</h2></div>
+                <div class="chart-container chart-sm"><canvas id="db-dist-chart"></canvas></div>
+            </div>
+        </div>
+        <div class="section-row">
+            <div class="panel">
+                <div class="panel-header"><h2>Threshold Sweep (F1 vs Threshold)</h2></div>
+                <div class="chart-container"><canvas id="db-threshold-chart"></canvas></div>
+            </div>
+        </div>
+        <div class="section-row">
+            <div class="panel panel-half">
+                <div class="panel-header"><h2>Performance by Source</h2></div>
+                <div id="db-per-source" class="metrics-table"></div>
+            </div>
+            <div class="panel panel-half">
+                <div class="panel-header"><h2>Bootstrap Confidence Intervals</h2></div>
+                <div id="db-ci" class="metrics-table"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- XLNet Tab -->
+<div id="tab-xlnet" class="tab-content">
+    <div id="xl-loading" class="loading-placeholder">Loading XLNet metrics…</div>
+    <div id="xl-content" style="display:none">
+        <div class="section-row">
+            <div class="panel panel-half">
+                <div class="panel-header"><h2>Anomaly Detection Metrics</h2></div>
+                <div class="metrics-grid" id="xl-metrics"></div>
+            </div>
+            <div class="panel panel-half">
+                <div class="panel-header"><h2>Confusion Matrix</h2></div>
+                <div class="confusion-matrix" id="xl-cm"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

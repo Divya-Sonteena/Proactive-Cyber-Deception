@@ -1,0 +1,86 @@
+version: "3.8"
+
+services:
+
+  cowrie:
+    image: cowrie/cowrie:latest
+    container_name: cowrie-honeypot
+    restart: always
+    ports:
+      - "2222:2222"  # SSH honeypot
+      - "2223:2223"  # Telnet honeypot
+    volumes:
+      - ../data/raw/cowrie:/cowrie/cowrie-git/var/log/cowrie
+    networks:
+      - honeynet
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f cowrie || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  dionaea:
+    image: dinotools/dionaea
+    container_name: dionaea-honeypot
+    restart: always
+    ports:
+      - "2121:21"    # FTP
+      - "4242:42"    # WINS
+      - "8081:80"    # HTTP
+      - "8446:445"   # SMB
+      - "11433:1433" # MSSQL
+      - "33061:3306" # MySQL
+    volumes:
+      - ../data/raw/dionaea:/opt/dionaea/var/log/dionaea
+    networks:
+      - honeynet
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f dionaea || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - honeynet
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  attacker:
+    image: python:3.9-slim
+    container_name: red-team-attacker
+    restart: no
+    volumes:
+      - ../scripts:/app
+      - ../data/raw:/data/raw
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Install dependencies and run the traffic simulation script
+    command: sh -c "pip install --quiet paramiko requests && python _traffic.py --duration 3600 --count 5000 --sleep 0.5"
+    networks:
+      - honeynet
+    depends_on:
+      cowrie:
+        condition: service_started
+      dionaea:
+        condition: service_started
+
+networks:
+  honeynet:
+    driver: bridge
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,16 @@
+{"timestamp": "2026-04-16T15:14:02.376750+00:00Z", "eventid": "cowrie.session.connect", "session": "gen_4bc689b3", "src_ip": "25.81.207.199", "dst_ip": "192.168.1.100", "dst_port": 22, "protocol": "ssh"}
+{"timestamp": "2026-04-16T15:14:03.376750+00:00Z", "eventid": "cowrie.client.version", "session": "gen_4bc689b3", "version": "SSH-2.0-OpenSSH_6.4p1"}
+{"timestamp": "2026-04-16T15:14:04.376750+00:00Z", "eventid": "cowrie.client.kex", "session": "gen_4bc689b3", "hassh": "326258393216984"}
+{"timestamp": "2026-04-16T15:14:06.376750+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_4bc689b3", "username": "user", "password": "toor"}
+{"timestamp": "2026-04-16T15:14:09.376750+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_4bc689b3", "username": "user", "password": "password"}
+{"timestamp": "2026-04-16T15:14:10.376750+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_4bc689b3", "username": "root", "password": "root"}
+{"timestamp": "2026-04-16T15:14:11.376750+00:00Z", "eventid": "cowrie.session.closed", "session": "gen_4bc689b3", "duration": 9.0}
+{"timestamp": "2026-04-16T15:18:46.601917+00:00Z", "eventid": "cowrie.session.connect", "session": "gen_b85d31b0", "src_ip": "54.194.62.73", "dst_ip": "192.168.1.100", "dst_port": 22, "protocol": "ssh"}
+{"timestamp": "2026-04-16T15:18:47.601917+00:00Z", "eventid": "cowrie.client.version", "session": "gen_b85d31b0", "version": "SSH-2.0-OpenSSH_6.1p2"}
+{"timestamp": "2026-04-16T15:18:48.601917+00:00Z", "eventid": "cowrie.client.kex", "session": "gen_b85d31b0", "hassh": "411245214588786"}
+{"timestamp": "2026-04-16T15:18:50.601917+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_b85d31b0", "username": "support", "password": "qwerty"}
+{"timestamp": "2026-04-16T15:18:51.601917+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_b85d31b0", "username": "oracle", "password": "changeme"}
+{"timestamp": "2026-04-16T15:18:52.601917+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_b85d31b0", "username": "oracle", "password": "admin"}
+{"timestamp": "2026-04-16T15:18:55.601917+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_b85d31b0", "username": "user", "password": "changeme"}
+{"timestamp": "2026-04-16T15:18:57.601917+00:00Z", "eventid": "cowrie.login.failed", "session": "gen_b85d31b0", "username": "oracle", "password": "root"}
+{"timestamp": "2026-04-16T15:19:00.601917+00:00Z", "eventid": "cowrie.session.closed", "session": "gen_b85d31b0", "duration": 14.0}

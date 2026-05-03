@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Admin Settings — PCD{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">⚙ Admin Settings</h1>
+        <p class="page-subtitle">Manage users and system configuration</p>
+    </div>
+    <span class="admin-badge">Admin Only</span>
+</div>
+
+<!-- User Management -->
+<div class="panel">
+    <div class="panel-header">
+        <h2>👥 User Management</h2>
+        <span id="user-count" class="badge">Loading…</span>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table" id="users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="users-tbody">
+                <tr><td colspan="4" class="table-empty">Loading users…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- System Info -->
+<div class="section-row">
+    <div class="panel panel-half">
+        <div class="panel-header"><h2>🖥 System Status</h2></div>
+        <div class="system-notes">
+            <div class="note-item">
+                <strong>Live Pipeline</strong>
+                <code>python live/runner.py</code>
+            </div>
+            <div class="note-item">
+                <strong>WebSocket</strong>
+                <span class="text-muted">Namespace: /ws/live — 15s polling fallback</span>
+            </div>
+            <div class="note-item">
+                <strong>ML Models</strong>
+                <span class="text-muted">DistilBERT (binary) + XLNet (next-token) — loaded at runner start</span>
+            </div>
+            <div class="note-item">
+                <strong>Database</strong>
+                <span class="text-muted">MongoDB — live data only. Reports use JSON files from reports/</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-half">
+        <div class="panel-header"><h2>🗂 Collections</h2></div>
+        <div class="system-notes">
+            <div class="note-item"><code>live_predictions</code><span class="text-muted"> — scored attack sequences</span></div>
+            <div class="note-item"><code>live_sequences</code><span class="text-muted"> — raw token sequences</span></div>
+            <div class="note-item"><code>live_events</code><span class="text-muted"> — parsed honeypot events</span></div>
+            <div class="note-item"><code>attack_campaigns</code><span class="text-muted"> — correlated attack groups</span></div>
+            <div class="note-item"><code>attacker_profiles</code><span class="text-muted"> — per-IP behavioural history</span></div>
+            <div class="note-item"><code>canary_triggers</code><span class="text-muted"> — honey artefact hits</span></div>
+            <div class="note-item"><code>ai_prevention_cache</code><span class="text-muted"> — 24h Groq cache</span></div>
+            <div class="note-item"><code>response_audit</code><span class="text-muted"> — admin action log</span></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

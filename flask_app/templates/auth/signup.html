@@ -1,0 +1,112 @@
+{% extends "base_public.html" %}
+{% block title %}Sign Up — Proactive Cyber Deception{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <span class="brand-icon-lg">⬡</span>
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-sub">Join as Student or Analyst</p>
+        </div>
+        {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Choose a username"
+                    required minlength="3" autofocus oninput="checkUsername(this.value)" />
+                <span id="username-status" style="font-size: 0.8rem; display: block; margin-top: 4px;"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Min. 8 characters"
+                        required minlength="8" oninput="checkStrength(this.value)" />
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')" tabindex="-1">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+                <div id="password-strength-bar" style="height: 4px; background: #333; margin-top: 8px; border-radius: 2px;">
+                    <div id="strength-fill" style="height: 100%; width: 0%; background: red; transition: all 0.3s;"></div>
+                </div>
+                <small id="strength-text" style="color: var(--text-muted);">Too weak</small>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-input"
+                        placeholder="Repeat password" required onpaste="return false;" oncopy="return false;" oncut="return false;" />
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')" tabindex="-1">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" class="form-input">
+                    <option value="student">Student — Educational view</option>
+                    <option value="analyst">Analyst — Full research view</option>
+                </select>
+                <p class="form-hint">Admin accounts must be assigned by an existing admin.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        </form>
+        <p class="auth-footer">Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+    </div>
+</div>
+<script>
+let typingTimer;
+async function checkUsername(name) {
+    const status = document.getElementById('username-status');
+    clearTimeout(typingTimer);
+    if(name.length < 3) {
+        status.textContent = ''; return;
+    }
+    status.textContent = 'Checking...';
+    status.style.color = 'var(--text-muted)';
+    typingTimer = setTimeout(async () => {
+        try {
+            const res = await fetch(`/api/check_username?username=${encodeURIComponent(name)}`);
+            const data = await res.json();
+            if(data.available) {
+                status.textContent = '✅ Username available';
+                status.style.color = 'lime';
+            } else {
+                status.textContent = '❌ Username taken';
+                status.style.color = 'red';
+            }
+        } catch(e) {}
+    }, 500);
+}
+
+function checkStrength(pw) {
+    let score = 0;
+    if(pw.length >= 8) score += 1;
+    if(pw.match(/[a-z]/) && pw.match(/[A-Z]/)) score += 1;
+    if(pw.match(/\d/)) score += 1;
+    if(pw.match(/[^a-zA-Z\d]/)) score += 1;
+    
+    const fill = document.getElementById('strength-fill');
+    const txt = document.getElementById('strength-text');
+    const colors = ['red', 'orange', 'yellow', 'lime', 'green'];
+    const texts = ['Too weak ❌', 'Weak ⚠️', 'Fair 🆗', 'Good ✅', 'Strong 🛡️'];
+    
+    fill.style.width = Math.min((score * 25), 100) + '%';
+    fill.style.background = colors[score];
+    txt.textContent = texts[score] || 'Too weak';
+}
+
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const btn = input.nextElementSibling;
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+    } else {
+        input.type = 'password';
+        btn.innerHTML = '<svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    }
+}
+</script>
+{% endblock %}

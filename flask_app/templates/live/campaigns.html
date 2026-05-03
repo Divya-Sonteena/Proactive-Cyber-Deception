@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Attack Campaigns — PCD{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">⛓ Attack Campaigns</h1>
+        <p class="page-subtitle">Correlated multi-session attack campaigns detected by the system</p>
+    </div>
+    <div class="page-actions">
+        <span class="badge badge-info" id="campaign-count">Loading…</span>
+        <button class="btn btn-ghost btn-sm" onclick="loadCampaigns()">↻ Refresh</button>
+    </div>
+</div>
+
+<!-- How campaigns work -->
+<div class="info-banner">
+    <span class="info-icon">ℹ</span>
+    <span>Campaigns are automatically detected by correlating sessions with matching
+        <strong>source IP</strong>, <strong>SSH fingerprint (HASSH)</strong>, or
+        <strong>attempted username</strong>. A campaign must span at least 2 sessions.</span>
+</div>
+
+<!-- Stats row -->
+<div class="cards-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem">
+    <div class="stat-card risk-card-critical">
+        <div class="stat-icon icon-red">🔴</div>
+        <div class="stat-body">
+            <div class="stat-value" id="camp-stat-critical">—</div>
+            <div class="stat-label">Critical Campaigns</div>
+        </div>
+    </div>
+    <div class="stat-card risk-card-high">
+        <div class="stat-icon icon-orange">🟠</div>
+        <div class="stat-body">
+            <div class="stat-value" id="camp-stat-high">—</div>
+            <div class="stat-label">High Risk</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-blue">⛓</div>
+        <div class="stat-body">
+            <div class="stat-value" id="camp-stat-total">—</div>
+            <div class="stat-label">Total Campaigns</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-green">📡</div>
+        <div class="stat-body">
+            <div class="stat-value" id="camp-stat-sessions">—</div>
+            <div class="stat-label">Total Sessions</div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign table -->
+<div class="panel">
+    <div class="panel-header">
+        <h2>Campaigns</h2>
+        <span class="text-muted text-sm" id="camp-timestamp"></span>
+    </div>
+    <div id="camp-loading" class="loading-center">
+        <span class="loader"></span><span>Loading campaigns…</span>
+    </div>
+    <div id="camp-empty" class="empty-state" style="display:none">
+        <p>⛓ No multi-session campaigns detected yet.</p>
+        <p class="text-muted text-sm">Campaigns appear when the same attacker conducts multiple sessions.</p>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table" id="camp-table" style="display:none">
+            <thead>
+                <tr>
+                    <th>Risk</th>
+                    <th>Campaign ID</th>
+                    <th>Sessions</th>
+                    <th>Source IPs</th>
+                    <th>Attack Types</th>
+                    <th>Duration</th>
+                    <th>Correlation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="camp-tbody"></tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/campaigns.js') }}"></script>
+{% endblock %}

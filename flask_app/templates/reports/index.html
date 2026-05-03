@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Reports — PCD{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">📥 Daily Reports</h1>
+    <p class="page-subtitle">Download each day's detection data as a formatted Excel workbook</p>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>Available Reports</h2>
+        <div class="rpt-search-wrap">
+            <input type="text" id="rpt-search" class="rpt-search" placeholder="Filter by date…">
+        </div>
+    </div>
+
+    <div id="rpt-loading" class="loading-placeholder">Loading available report dates…</div>
+    <div id="rpt-empty" style="display:none;padding:2rem;text-align:center;color:var(--text-muted)">
+        No prediction data found in the database yet.
+    </div>
+
+    <div id="rpt-table-wrap" style="display:none">
+        <table class="data-table rpt-table" id="rpt-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total Sequences</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="rpt-tbody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Sheet explanation -->
+<div class="panel mt-2">
+    <div class="panel-header"><h2>📋 What's inside each Excel file?</h2></div>
+    <div class="rpt-sheets-grid">
+        <div class="rpt-sheet-card">
+            <div class="rpt-sheet-num">1</div>
+            <div class="rpt-sheet-info">
+                <div class="rpt-sheet-name">Predictions</div>
+                <div class="rpt-sheet-desc">One row per detection — sequence ID, source, attack type, risk level (colour-coded), DistilBERT label, confidence, severity, predicted next token, MITRE technique IDs, status and timestamp.</div>
+            </div>
+        </div>
+        <div class="rpt-sheet-card">
+            <div class="rpt-sheet-num">2</div>
+            <div class="rpt-sheet-info">
+                <div class="rpt-sheet-name">Risk Summary</div>
+                <div class="rpt-sheet-desc">Count and percentage for CRITICAL / HIGH / MEDIUM / LOW with colour-coded cells.</div>
+            </div>
+        </div>
+        <div class="rpt-sheet-card">
+            <div class="rpt-sheet-num">3</div>
+            <div class="rpt-sheet-info">
+                <div class="rpt-sheet-name">Model Agreement</div>
+                <div class="rpt-sheet-desc">Breakdown of sequences where both models agreed, and where only one model flagged the event.</div>
+            </div>
+        </div>
+        <div class="rpt-sheet-card">
+            <div class="rpt-sheet-num">4</div>
+            <div class="rpt-sheet-info">
+                <div class="rpt-sheet-name">Report Info</div>
+                <div class="rpt-sheet-desc">Metadata — report date, generated at, user, total events, system name.</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Response Audit — PCD{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">🛡 Response Audit Log</h1>
+        <p class="page-subtitle">All automated response actions performed by administrators</p>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="loadAudit()">↻ Refresh</button>
+</div>
+
+<!-- Quick stats -->
+<div class="cards-grid" id="audit-stats" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.25rem">
+    <div class="stat-card">
+        <div class="stat-icon icon-red">🚫</div>
+        <div class="stat-body">
+            <div class="stat-value" id="stat-block">—</div>
+            <div class="stat-label">Block IP Actions</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-orange">👁</div>
+        <div class="stat-body">
+            <div class="stat-value" id="stat-watch">—</div>
+            <div class="stat-label">Watchlist Additions</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-blue">📋</div>
+        <div class="stat-body">
+            <div class="stat-value" id="stat-note">—</div>
+            <div class="stat-label">Log-Only Actions</div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div id="audit-loading" class="loading-center">
+        <span class="loader"></span><span>Loading audit log…</span>
+    </div>
+    <div id="audit-empty" class="empty-state" style="display:none">
+        <p>🛡 No response actions have been performed yet.</p>
+        <p class="text-muted text-sm">Actions appear here when an admin responds to a sequence from the Sequence Detail page.</p>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table" id="audit-table" style="display:none">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                    <th>Target IP</th>
+                    <th>Sequence</th>
+                    <th>Executed</th>
+                    <th>OS Command</th>
+                    <th>Performed By</th>
+                </tr>
+            </thead>
+            <tbody id="audit-tbody"></tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+'use strict';
+async function loadAudit() {
+    document.getElementById('audit-loading').style.display = 'flex';
+    document.getElementById('audit-table').style.display = 'none';
+    document.getElementById('audit-empty').style.display = 'none';
+
+    const r = await fetch('/api/live/response-audit');
+    const d = await r.json();
+    const tbody = document.getElementById('audit-tbody');
+    document.getElementById('audit-loading').style.display = 'none';
+
+    if (!d.audit || d.audit.length === 0) {
+        document.getElementById('audit-empty').style.display = 'flex';
+        return;
+    }
+
+    // Update stats
+    const counts = { block_ip: 0, watch_ip: 0, note_only: 0 };
+    d.audit.forEach(a => { if (a.action in counts) counts[a.action]++; });
+    document.getElementById('stat-block').textContent = counts.block_ip;
+    document.getElementById('stat-watch').textContent = counts.watch_ip;
+    document.getElementById('stat-note').textContent  = counts.note_only;
+
+    const ACTION_STYLES = {
+        block_ip:  { label: '🚫 Block IP',  cls: 'risk-CRITICAL' },
+        watch_ip:  { label: '👁 Watchlist', cls: 'risk-HIGH' },
+        note_only: { label: '📋 Log Only',  cls: 'risk-LOW' },
+    };
+
+    document.getElementById('audit-table').style.display = 'table';
+    tbody.innerHTML = d.audit.map(a => {
+        const s = ACTION_STYLES[a.action] || { label: a.action, cls: '' };
+        return `<tr>
+      <td class="monospace text-muted" style="font-size:0.78rem">${(a.performed_at || '').replace('T',' ').slice(0, 19)}</td>
+      <td><span class="risk-badge ${s.cls}">${s.label}</span></td>
+      <td class="monospace">${a.target_ip || '—'}</td>
+      <td class="monospace" style="font-size:0.75rem" title="${a.sequence_id || ''}">${(a.sequence_id || '').slice(-20)}</td>
+      <td>${a.executed ? '<span style="color:#10b981;font-weight:600">✓ Yes</span>' : '<span style="color:#ef4444">✗ No</span>'}</td>
+      <td class="monospace text-muted" style="font-size:0.75rem" title="${a.os_command || ''}">${a.os_command ? a.os_command.slice(0, 45) + '…' : '—'}</td>
+      <td><strong>${a.performed_by || '—'}</strong></td>
+    </tr>`;
+    }).join('');
+}
+loadAudit();
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base_public.html" %}
+{% block title %}Login — Proactive Cyber Deception{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <span class="brand-icon-lg">⬡</span>
+            <h1 class="auth-title">Sign in</h1>
+            <p class="auth-sub">Proactive Cyber Deception Dashboard</p>
+        </div>
+        {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Enter username"
+                    required autofocus />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Enter password"
+                        required />
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')" tabindex="-1">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+        </form>
+        <p class="auth-footer">No account? <a href="{{ url_for('auth.signup') }}">Create one</a></p>
+    </div>
+</div>
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const btn = input.nextElementSibling;
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+    } else {
+        input.type = 'password';
+        btn.innerHTML = '<svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    }
+}
+</script>
+{% endblock %}
