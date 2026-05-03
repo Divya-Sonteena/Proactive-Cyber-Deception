@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — PCD{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="page-meta">
+        <span class="live-badge">⚡ LIVE</span>
+        <span id="last-updated" class="text-muted">Loading…</span>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="cards-grid" id="summary-cards">
+    <div class="stat-card" id="card-total">
+        <div class="stat-icon icon-blue">⊞</div>
+        <div class="stat-body">
+            <div class="stat-value" id="total-sessions">—</div>
+            <div class="stat-label">Sessions Today</div>
+        </div>
+    </div>
+    <div class="stat-card" id="card-active">
+        <div class="stat-icon icon-green">⚡</div>
+        <div class="stat-body">
+            <div class="stat-value" id="active-sessions">—</div>
+            <div class="stat-label">Active (last 10 min)</div>
+        </div>
+    </div>
+    <div class="stat-card risk-card-critical" id="card-critical">
+        <div class="stat-icon icon-red">🔴</div>
+        <div class="stat-body">
+            <div class="stat-value" id="critical-count">—</div>
+            <div class="stat-label">Critical</div>
+        </div>
+    </div>
+    <div class="stat-card risk-card-high" id="card-high">
+        <div class="stat-icon icon-orange">🟠</div>
+        <div class="stat-body">
+            <div class="stat-value" id="high-count">—</div>
+            <div class="stat-label">High Risk</div>
+        </div>
+    </div>
+    <div class="stat-card risk-card-medium" id="card-medium">
+        <div class="stat-icon icon-yellow">🟡</div>
+        <div class="stat-body">
+            <div class="stat-value" id="medium-count">—</div>
+            <div class="stat-label">Medium Risk</div>
+        </div>
+    </div>
+    <div class="stat-card risk-card-low" id="card-low">
+        <div class="stat-icon icon-green">🟢</div>
+        <div class="stat-body">
+            <div class="stat-value" id="low-count">—</div>
+            <div class="stat-label">Low Risk</div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 1: Honeypot Status + Risk Distribution -->
+<div class="section-row">
+    <div class="panel panel-half">
+        <div class="panel-header">
+            <h2>Honeypot Status</h2>
+            <span class="panel-badge">Read-only</span>
+        </div>
+        <div class="honeypot-status-grid">
+            <div class="hp-status-card" id="cowrie-card">
+                <div class="hp-header">
+                    <span class="hp-name">Cowrie (SSH/Telnet)</span>
+                    <span class="hp-badge" id="cowrie-status">—</span>
+                </div>
+                <div class="hp-stats">
+                    <div><span class="hp-stat-label">Sessions today</span><span id="cowrie-today">—</span></div>
+                    <div><span class="hp-stat-label">Last event</span><span id="cowrie-last" class="monospace">—</span></div>
+                </div>
+            </div>
+            <div class="hp-status-card" id="dionaea-card">
+                <div class="hp-header">
+                    <span class="hp-name">Dionaea (Multi-protocol)</span>
+                    <span class="hp-badge" id="dionaea-status">—</span>
+                </div>
+                <div class="hp-stats">
+                    <div><span class="hp-stat-label">Sessions today</span><span id="dionaea-today">—</span></div>
+                    <div><span class="hp-stat-label">Last event</span><span id="dionaea-last" class="monospace">—</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk Distribution Chart -->
+    <div class="panel panel-half">
+        <div class="panel-header">
+            <h2>Risk Distribution</h2>
+            <span class="panel-badge">Today</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="risk-chart" aria-label="Risk distribution chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2: Attack Type Breakdown + Hourly Trend -->
+{% if not current_user.is_student() %}
+<div class="section-row">
+    <div class="panel panel-half">
+        <div class="panel-header">
+            <h2>Attack Type Breakdown</h2>
+            <span class="panel-badge">Today</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="attack-type-chart" aria-label="Attack type breakdown chart"></canvas>
+        </div>
+    </div>
+    <div class="panel panel-half">
+        <div class="panel-header">
+            <h2>Hourly Activity</h2>
+            <span class="panel-badge">Live Trend</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="hourly-trend-chart" aria-label="Hourly activity trend"></canvas>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Student learning panel -->
+<div class="panel student-panel">
+    <div class="panel-header">
+        <h2>💡 What am I seeing?</h2>
+    </div>
+    <p>This dashboard shows <strong>live honeypot activity</strong>. Honeypots are decoy systems that attract real cyber
+        attackers. Every coloured card above represents a detected attack session.</p>
+    <div class="student-hints">
+        <div class="hint-item"><strong>🔴 Critical</strong> — Highly dangerous: active exploitation or malware detected.</div>
+        <div class="hint-item"><strong>🟠 High</strong> — Significant threat: successful login or privilege escalation.</div>
+        <div class="hint-item"><strong>🟡 Medium</strong> — Elevated: brute-force or command execution attempted.</div>
+        <div class="hint-item"><strong>🟢 Low</strong> — Routine: port scanning or reconnaissance only.</div>
+    </div>
+    <a href="{{ url_for('main.explainability') }}" class="btn btn-primary mt-2">📖 Learn how this works</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

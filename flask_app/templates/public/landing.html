@@ -1,0 +1,121 @@
+{% extends "base_public.html" %}
+{% block title %}Proactive Cyber Deception{% endblock %}
+{% block content %}
+<div class="landing-page">
+
+    <!-- Hero -->
+    <header class="landing-hero">
+        <div class="hero-glow"></div>
+        <nav class="landing-nav">
+            <div class="landing-brand">
+                <span class="brand-icon">⬡</span>
+                <span>Proactive Cyber Deception</span>
+            </div>
+            <div class="landing-nav-links">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-ghost">Login</a>
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+        <div class="hero-content">
+            <div class="hero-badge">Research SOC Platform</div>
+            <h1 class="hero-title">Proactive Cyber<br /><span class="gradient-text">Deception</span></h1>
+            <p class="hero-subtitle">AI-powered honeypot monitoring with real-time attack classification,<br />anomaly
+                detection, and behavioural prediction using DistilBERT and XLNet.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Enter Dashboard</a>
+                <a href="#how-it-works" class="btn btn-ghost btn-lg">How It Works</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-sub">The platform continuously feeds live honeypot traffic through an AI pipeline to classify,
+            score, and guide response.</p>
+        <div class="pipeline-flow">
+            <div class="pipeline-step">
+                <div class="step-icon">🍯</div>
+                <h3>Honeypot</h3>
+                <p>Cowrie (SSH) and Dionaea (multi-protocol) honeypots capture real attacker sessions and traffic.</p>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">🔤</div>
+                <h3>Tokenization</h3>
+                <p>Raw events are converted to canonical tokens — SCAN, LOGIN_ATT, EXEC, FILE_XFER — forming attack
+                    sequences.</p>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">🧠</div>
+                <h3>ML Models</h3>
+                <p>DistilBERT classifies attacks (95.6% accuracy). XLNet predicts next attacker action from sequence
+                    context.</p>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">⚠</div>
+                <h3>Risk Scoring</h3>
+                <p>Combined severity score (token severity + attack probability + anomaly score) assigns LOW / MEDIUM /
+                    HIGH / CRITICAL risk.</p>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">🛡</div>
+                <h3>Prevention</h3>
+                <p>Structured mitigation guidance — Immediate, Short-term, Long-term — across access control, network
+                    security, and host hardening.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roles -->
+    <section class="roles-section">
+        <h2 class="section-title">Role-Based Access</h2>
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="role-icon role-student-icon">🎓</div>
+                <h3>Student</h3>
+                <p>Educational view with simplified charts, concept explanations, and guided attack walkthroughs. No
+                    sensitive data exposed.</p>
+                <ul class="role-features">
+                    <li>✓ Dashboard overview</li>
+                    <li>✓ Live monitoring (sanitized)</li>
+                    <li>✓ Explainability guide</li>
+                    <li>✓ Reports and models</li>
+                </ul>
+            </div>
+            <div class="role-card role-card-featured">
+                <div class="role-icon role-analyst-icon">🔍</div>
+                <h3>Analyst</h3>
+                <p>Full research view with detailed metrics, sequence inspection, prevention guidance, and analyst
+                    annotation tools.</p>
+                <ul class="role-features">
+                    <li>✓ Everything in Student</li>
+                    <li>✓ Full sequence detail</li>
+                    <li>✓ Analyst notes</li>
+                    <li>✓ Alert lifecycle management</li>
+                </ul>
+            </div>
+            <div class="role-card">
+                <div class="role-icon role-admin-icon">⚙</div>
+                <h3>Admin</h3>
+                <p>Complete system visibility including raw metadata, source IPs, executed commands, and user
+                    management.</p>
+                <ul class="role-features">
+                    <li>✓ Everything in Analyst</li>
+                    <li>✓ Raw metadata (IPs, commands)</li>
+                    <li>✓ User management</li>
+                    <li>✓ System settings</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p>Proactive Cyber Deception — Research-grade SOC platform • Built with Flask, DistilBERT, XLNet</p>
+    </footer>
+</div>
+{% endblock %}

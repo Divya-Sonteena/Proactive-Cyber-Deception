@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Sequence Detail — PCD{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="{{ url_for('main.live_monitor') }}" class="btn btn-ghost btn-sm">← Back to Live</a>
+    <h1 class="page-title">Sequence Detail</h1>
+</div>
+
+<div id="seq-loading" class="loading-placeholder">Loading sequence…</div>
+
+<div id="seq-content" style="display:none">
+
+    <!-- 1. Attack Overview -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2>1. Attack Overview</h2>
+            <div class="overview-badges" id="ov-badges">
+            </div>
+        </div>
+        <div class="overview-grid">
+            <div class="ov-item"><span class="ov-label">Session ID</span><code id="ov-session" class="monospace">—</code></div>
+            <div class="ov-item"><span class="ov-label">Attack Type</span><span id="ov-attack">—</span></div>
+            <div class="ov-item"><span class="ov-label">Risk Level</span><span id="ov-risk" class="risk-badge">—</span></div>
+            <div class="ov-item"><span class="ov-label">Honeypot Source</span><span id="ov-source">—</span></div>
+            <div class="ov-item"><span class="ov-label">Detected At</span><span id="ov-time" class="monospace">—</span></div>
+        </div>
+    </div>
+
+    <!-- 2. Token Flow Visualization -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2>2. Token Flow Visualization</h2>
+            <span class="panel-hint">Observed tokens in sequence. Bold = predicted next action.</span>
+        </div>
+        <div class="token-flow" id="token-flow-container"></div>
+        <div class="token-legend">
+            <span class="legend-item"><span class="token-chip tok-low">LOW</span>Low severity</span>
+            <span class="legend-item"><span class="token-chip tok-medium">MEDIUM</span>Medium severity</span>
+            <span class="legend-item"><span class="token-chip tok-high">HIGH</span>High severity</span>
+            <span class="legend-item"><span class="token-chip tok-critical">CRITICAL</span>Critical severity</span>
+            <span class="legend-item"><span class="token-chip tok-predicted">NEXT?</span>Predicted next</span>
+        </div>
+    </div>
+
+    <!-- 3 & 4. Model Outputs + Severity Breakdown -->
+    <div class="section-row">
+        <div class="panel panel-half">
+            <div class="panel-header"><h2>3. Model Outputs</h2></div>
+            <div class="model-outputs">
+                <div class="model-row">
+                    <span class="model-label">DistilBERT Attack Probability</span>
+                    <div class="prob-bar-wrap">
+                        <div class="prob-bar" id="distilbert-bar"></div>
+                        <span class="prob-val" id="distilbert-val">—</span>
+                    </div>
+                    <span class="model-verdict" id="distilbert-verdict">—</span>
+                </div>
+                <div class="model-row">
+                    <span class="model-label">Predicted Next Action</span>
+                    <span class="next-token-tag" id="next-token-tag">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-half">
+            <div class="panel-header"><h2>4. Severity Breakdown</h2></div>
+            <div class="severity-breakdown">
+                <div class="sev-row"><span>Token Severity (mean)</span><span id="sev-token">—</span></div>
+                <div class="sev-row"><span>Attack Probability</span><span id="sev-atk">—</span></div>
+                <div class="sev-row sev-total"><span>Combined Severity</span><span id="sev-combined">—</span></div>
+                <div class="sev-row"><span>Final Risk Level</span><span id="sev-risk" class="risk-badge">—</span></div>
+            </div>
+            <div class="chart-container chart-sm">
+                <canvas id="severity-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Behavioural Escalation Graph -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2>5. Behavioural Escalation</h2>
+            <span class="panel-hint">Risk score evolution as attack tokens arrive</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="escalation-chart" aria-label="Escalation graph"></canvas>
+        </div>
+    </div>
+
+    <!-- 6. Prevention & Mitigation -->
+    <div class="panel" id="prevention-panel">
+        <div class="panel-header">
+            <h2>6. Prevention &amp; Mitigation</h2>
+            <div style="display:flex;align-items:center;gap:10px">
+                <span id="prevention-source-badge" class="badge" style="display:none"></span>
+                <button class="btn btn-ghost btn-sm" id="btn-regenerate" onclick="regeneratePrevention()" title="Generate fresh AI advice">
+                    ✦ Regenerate with AI
+                </button>
+            </div>
+        </div>
+        <div class="trigger-explanation" id="trigger-explanation"></div>
+        
+    </div>
+
+    <!-- 7. MITRE ATT&CK Techniques -->
+    <div class="panel" id="mitre-panel">
+        <div class="panel-header">
+            <h2>🛡 MITRE ATT&amp;CK Techniques</h2>
+            <span class="panel-hint">Techniques mapped from observed attack tokens</span>
+        </div>
+        <div id="mitre-content">
+            <div class="loading-placeholder">Loading MITRE data…</div>
+        </div>
+    </div>
+
+    <!-- 8. Attacker Behavioral Profile -->
+    <div class="panel" id="profile-panel">
+        <div class="panel-header">
+            <h2>👤 Attacker Behavioral Profile</h2>
+            <span class="panel-hint">History and fingerprint of this source IP</span>
+        </div>
+        <div id="profile-content">
+            <div class="loading-placeholder">Loading attacker profile…</div>
+        </div>
+    </div>
+
+    <!-- 10. Analyst Notes -->
+    <div class="panel">
+        <div class="panel-header"><h2>📝 Analyst Notes</h2></div>
+        <div id="notes-container" class="notes-list"></div>
+        <form id="add-note-form" class="add-note-form">
+            <textarea id="note-text" class="form-input note-textarea" placeholder="Add investigation note…" rows="3"></textarea>
+            <button type="submit" class="btn btn-primary">Add Note</button>
+        </form>
+    </div>
+
+    <!-- Raw Metadata (Admin only) -->
+    {% if current_user.is_admin() %}
+    <div class="panel panel-admin">
+        <div class="panel-header">
+            <h2>🗂 Raw Metadata <span class="admin-badge">Admin</span></h2>
+        </div>
+        <div id="raw-metadata" class="raw-meta"></div>
+    </div>
+    {% endif %}
+
+    <!-- Automated Response (Admin only) -->
+    {% if current_user.is_admin() %}
+    <div class="panel panel-admin" id="respond-panel">
+        <div class="panel-header">
+            <h2>🚨 Automated Response <span class="admin-badge">Admin</span></h2>
+            <span class="panel-hint">Execute firewall or watchlist actions against the attacker IP</span>
+        </div>
+        <div id="respond-result" style="display:none" class="respond-result"></div>
+        <div class="respond-actions">
+            <button class="btn btn-danger btn-sm" onclick="respondAction('block_ip')" id="btn-block">
+                🚫 Block IP (Firewall)
+            </button>
+            <button class="btn btn-warning btn-sm" onclick="respondAction('watch_ip')" id="btn-watch">
+                👁 Add to Watchlist
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="respondAction('note_only')" id="btn-note">
+                📋 Log Action Only
+            </button>
+        </div>
+        <p class="text-muted text-sm" style="margin-top:0.5rem">
+            Firewall block adds a rule via <code>netsh advfirewall</code> (Windows) or <code>iptables</code> (Linux).
+            All actions are audit-logged. <a href="{{ url_for('main.response_audit') }}" class="text-muted">View audit log →</a>
+        </p>
+    </div>
+    {% endif %}
+
+</div><!-- #seq-content -->
+
+<script>
+    const SEQUENCE_ID  = "{{ sequence_id }}";
+    const IS_ADMIN     = {{ 'true' if current_user.is_admin() else 'false' }};
+    const API_BASE     = "{{ url_for('api.live_sequence', sequence_id=sequence_id) }}";
+    const NOTES_API    = "{{ url_for('api.add_note', sequence_id=sequence_id) }}";
+    const RESPOND_API  = `/api/live/sequence/${"{{ sequence_id }}"}/respond`;
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/sequence_detail.js') }}?v=3"></script>
+{% endblock %}

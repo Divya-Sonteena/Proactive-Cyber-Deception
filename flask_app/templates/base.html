@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Proactive Cyber Deception — SOC Dashboard" />
+  <title>{% block title %}Proactive Cyber Deception{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-text">Proactive Cyber Deception</span>
+    </div>
+    <div class="navbar-right">
+      {% if current_user.is_authenticated %}
+      <span class="nav-user">
+        <span class="user-icon">👤</span>
+        <strong>{{ current_user.username }}</strong>
+      </span>
+      <span class="role-badge role-{{ current_user.role }}">{{ current_user.role | upper }}</span>
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-sm">Logout</a>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-sm">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="{{ url_for('main.dashboard') }}"
+          class="nav-item {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+          <span class="nav-icon">⊞</span><span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('main.live_monitor') }}"
+          class="nav-item {% if request.endpoint in ('main.live_monitor','main.sequence_detail') %}active{% endif %}">
+          <span class="nav-icon">⚡</span><span>Live Monitoring</span>
+          <span class="nav-pulse" id="live-pulse"></span>
+        </a>
+        {% if current_user.is_authenticated and current_user.is_analyst() %}
+        <a href="{{ url_for('main.campaigns') }}"
+          class="nav-item {% if 'campaign' in (request.endpoint or '') %}active{% endif %}">
+          <span class="nav-icon">⛓</span><span>Campaigns</span>
+        </a>
+        {% endif %}
+        <a href="{{ url_for('main.honeypots') }}"
+          class="nav-item {% if request.endpoint == 'main.honeypots' %}active{% endif %}">
+          <span class="nav-icon">🍯</span><span>Honeypots</span>
+        </a>
+        <a href="{{ url_for('main.models_page') }}"
+          class="nav-item {% if request.endpoint == 'main.models_page' %}active{% endif %}">
+          <span class="nav-icon">🧠</span><span>Models</span>
+        </a>
+        <a href="{{ url_for('main.reports') }}"
+          class="nav-item {% if request.endpoint == 'main.reports' %}active{% endif %}">
+          <span class="nav-icon">📊</span><span>Reports</span>
+        </a>
+        <a href="{{ url_for('main.explainability') }}"
+          class="nav-item {% if request.endpoint == 'main.explainability' %}active{% endif %}">
+          <span class="nav-icon">💡</span><span>Explainability</span>
+        </a>
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+        <div class="nav-divider"></div>
+        <a href="{{ url_for('admin.settings') }}"
+          class="nav-item {% if request.endpoint == 'admin.settings' %}active{% endif %}">
+          <span class="nav-icon">⚙</span><span>Settings</span>
+          <span class="admin-badge">Admin</span>
+        </a>
+        <a href="{{ url_for('main.response_audit') }}"
+          class="nav-item {% if request.endpoint == 'main.response_audit' %}active{% endif %}">
+          <span class="nav-icon">🛡</span><span>Response Audit</span>
+          <span class="admin-badge">Admin</span>
+        </a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-footer">
+        <div class="live-indicator" id="ws-status">
+          <span class="dot dot-connecting"></span>
+          <span class="indicator-text">Connecting…</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  
+  <!-- Prevent back button navigation for analysts and students -->
+  <script>
+    (function() {
+      // Push a new state to history to block back navigation
+      window.history.pushState(null, null, window.location.href);
+      
+      // Listen for browser back button
+      window.addEventListener('popstate', function(event) {
+        // Push state again to prevent going back
+        window.history.pushState(null, null, window.location.href);
+      });
+      
+      // Prevent back button navigation on hash changes
+      window.addEventListener('hashchange', function(event) {
+        event.preventDefault();
+        window.history.pushState(null, null, window.location.href);
+      });
+    })();
+  </script>
+  
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

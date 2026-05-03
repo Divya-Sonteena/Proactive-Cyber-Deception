@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Live Monitoring — PCD{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">⚡ Live Monitoring</h1>
+    <div class="page-meta">
+    
+        <span id="feed-status" class="text-muted">Connecting to live feed…</span>
+        <select id="risk-filter" class="form-input form-input-sm">
+            <option value="">All Risk Levels</option>
+            <option value="CRITICAL">🔴 Critical</option>
+            <option value="HIGH">🟠 High</option>
+            <option value="MEDIUM">🟡 Medium</option>
+            <option value="LOW">🟢 Low</option>
+        </select>
+        <select id="date-filter" class="form-input form-input-sm">
+            <option value="">All Dates</option>
+        </select>
+        
+    </div>
+</div>
+
+<!-- Live table -->
+<div class="panel panel-flush">
+    <div class="panel-header">
+        <h2>Attack Sessions</h2>
+        <span id="row-count" class="badge">0 sessions</span>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table" id="live-table">
+            <thead>
+                <tr>
+                    <th>Session ID</th>
+                    <th>Source</th>
+                    <th>Attack Type</th>
+                    <th>Risk Level</th>
+                    <th>Severity Score</th>
+                    <th>Predicted Next</th>
+                    <th>DistilBERT</th>
+                    <th>Prevention Summary</th>
+                    <th>Time</th>
+                    {% if current_user.is_authenticated and current_user.is_analyst() %}<th>Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody id="live-tbody">
+                <tr>
+                    <td colspan="10" class="table-empty">
+                        <div class="loading-spinner"></div>
+                        <span>Waiting for live data…</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-footer">
+        <button id="load-more-btn" class="btn btn-ghost btn-sm" style="display:none">Load more</button>
+        <span id="new-events-toast" class="toast toast-hidden">New events received</span>
+    </div>
+</div>
+
+{% if current_user.is_student() %}
+<div class="student-panel mt-2">
+    <h3>💡 What is this table?</h3>
+    <p>Each row is a <strong>live attacker session</strong> captured by one of our honeypots. The colour shows how
+        dangerous the session is. Click a row to learn more about that type of attack.</p>
+</div>
+{% endif %}
+
+<script>
+    const IS_ANALYST = {{ 'true' if current_user.is_analyst() else 'false' }};
+    const IS_STUDENT = {{ 'true' if current_user.is_student() else 'false' }};
+    const SEQUENCE_DETAIL_BASE = "{{ url_for('main.sequence_detail', sequence_id='__ID__') }}";
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/live_monitor.js') }}"></script>
+{% endblock %}

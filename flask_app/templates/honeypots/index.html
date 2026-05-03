@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Honeypots — PCD{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">🍯 Honeypots</h1>
+    <span class="data-source-tag">Source: MongoDB (Live) — Read-only</span>
+</div>
+<div class="section-row">
+    <div class="panel panel-half" id="cowrie-panel">
+        <div class="panel-header">
+            <h2>Cowrie — SSH/Telnet Honeypot</h2><span class="hp-badge" id="cowrie-status-badge">Loading…</span>
+        </div>
+        <div class="hp-detail-grid">
+            <div class="hp-detail-item"><span class="hp-detail-label">Total Sessions (all time)</span><span
+                    id="hp-cowrie-total" class="stat-value-lg">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Sessions Today</span><span id="hp-cowrie-today"
+                    class="stat-value-lg">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Historical Sessions</span><span
+                    id="hp-cowrie-historical">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Last Event</span><span id="hp-cowrie-last"
+                    class="monospace">—</span></div>
+        </div>
+        <div class="hp-info-box">
+            <h4>About Cowrie</h4>
+            <p>Cowrie is a medium-interaction SSH and Telnet honeypot. It emulates an SSH server and logs all commands
+                entered by attackers, as well as credentials used in brute-force attacks. Data is tokenised into
+                canonical sequences for ML analysis.</p>
+            <p><strong>Captures:</strong> SCAN, RECON, LOGIN_ATT, LOGIN_OK, EXEC, FILE_XFER, TUNNEL, SESS_END</p>
+        </div>
+    </div>
+    <div class="panel panel-half" id="dionaea-panel">
+        <div class="panel-header">
+            <h2>Dionaea — Multi-protocol Honeypot</h2><span class="hp-badge"
+                id="dionaea-status-badge">Loading…</span>
+        </div>
+        <div class="hp-detail-grid">
+            <div class="hp-detail-item"><span class="hp-detail-label">Total Sessions (all time)</span><span
+                    id="hp-dionaea-total" class="stat-value-lg">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Sessions Today</span><span id="hp-dionaea-today"
+                    class="stat-value-lg">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Historical Sessions</span><span
+                    id="hp-dionaea-historical">—</span></div>
+            <div class="hp-detail-item"><span class="hp-detail-label">Last Event</span><span id="hp-dionaea-last"
+                    class="monospace">—</span></div>
+        </div>
+        <div class="hp-info-box">
+            <h4>About Dionaea</h4>
+            <p>Dionaea is a low-interaction honeypot that catches malware by emulating vulnerable services (SMB, HTTP,
+                FTP, MSSQL, MySQL). It collects malware binaries and network exploits for analysis.</p>
+            <p><strong>Captures:</strong> SCAN, EXPLOITATION, MALWARE, FILE_XFER, SESS_END</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    fetch('/api/honeypots').then(r => r.json()).then(data => {
+        ['cowrie', 'dionaea'].forEach(src => {
+            const d = data[src];
+            document.getElementById(`hp-${src}-total`).textContent = d.total_sessions;
+            document.getElementById(`hp-${src}-today`).textContent = d.sessions_today;
+            document.getElementById(`hp-${src}-historical`).textContent = d.historical_sessions;
+            document.getElementById(`hp-${src}-last`).textContent = d.last_event ? new Date(d.last_event).toLocaleString() : 'No events yet';
+            const badge = document.getElementById(`${src}-status-badge`);
+            badge.textContent = d.status.toUpperCase();
+            badge.className = `hp-badge hp-badge-${d.status}`;
+        });
+    });
+</script>
+{% endblock %}

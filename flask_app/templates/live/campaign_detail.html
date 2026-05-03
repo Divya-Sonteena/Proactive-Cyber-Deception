@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Campaign Detail — Proactive Cyber Deception{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="{{ url_for('main.campaigns') }}" class="back-link">← All Campaigns</a>
+        <h1 class="page-title" id="camp-title">Campaign Detail</h1>
+        <p class="page-subtitle" id="camp-subtitle">Loading…</p>
+    </div>
+    <div id="camp-risk-badge"></div>
+</div>
+
+<!-- Campaign meta cards -->
+<div class="cards-row" id="camp-meta-cards">
+    <div class="summary-card">
+        <div class="card-label">Sessions</div>
+        <div class="card-value" id="meta-sessions">—</div>
+    </div>
+    <div class="summary-card">
+        <div class="card-label">Source IPs</div>
+        <div class="card-value" id="meta-ips">—</div>
+    </div>
+    <div class="summary-card">
+        <div class="card-label">First Seen</div>
+        <div class="card-value text-sm" id="meta-first">—</div>
+    </div>
+    <div class="summary-card">
+        <div class="card-label">Last Seen</div>
+        <div class="card-value text-sm" id="meta-last">—</div>
+    </div>
+    <div class="summary-card">
+        <div class="card-label">Attack Types</div>
+        <div class="card-value text-sm" id="meta-types">—</div>
+    </div>
+</div>
+
+<!-- Correlation signals -->
+<div class="panel">
+    <div class="panel-header"><span class="panel-title">Correlation Signals</span></div>
+    <div id="corr-signals" class="token-flow"></div>
+</div>
+
+<!-- Linked sessions table -->
+<div class="panel">
+    <div class="panel-header"><span class="panel-title">Linked Sessions</span></div>
+    <div id="sessions-loading" class="loading-center">
+        <span class="loader"></span><span>Loading sessions…</span>
+    </div>
+    <table class="data-table" id="sessions-table" style="display:none">
+        <thead>
+            <tr>
+                <th>Risk</th>
+                <th>Sequence</th>
+                <th>Source</th>
+                <th>Attack Type</th>
+                <th>Tokens (preview)</th>
+                <th>Detected At</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="sessions-tbody"></tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const CAMPAIGN_ID = "{{ campaign_id }}";
+</script>
+<script src="{{ url_for('static', filename='js/campaigns.js') }}"></script>
+{% endblock %}
