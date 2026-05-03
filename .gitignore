@@ -71,4 +71,4 @@ reports/
 # Data (sensitive or large)
 data/live_processed/
 data/raw/
-data/processed/
+data/live_raw/
