@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignore large raw datasets and model checkpoints that should not be stored in Git
+data/beth/raw/
+models/*/checkpoint-*
+*.safetensors
+*.pt
